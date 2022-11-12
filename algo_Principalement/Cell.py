@@ -21,7 +21,7 @@ class Cell:
                 self.left = True
            
         # If cell is anywhere else
-        elif typeCell != 0 :
+        else :
             self.score = max(valueFromRow, valueFromColumn, valueFromDiagonal)
 
             # active the arrows by looking at the max score contributor(s)

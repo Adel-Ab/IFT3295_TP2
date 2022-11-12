@@ -34,9 +34,9 @@ def suffixPrefixAlignment(sequenceRow, sequenceColumn):
 
     # Hard coded scoring values
     # TO REPLACE IN CODE
-    match = 4
-    mismatch = -4
-    indel = -8
+    match = 1
+    mismatch = -1
+    indel = -1
     # Highest cell score to date
     maxScore = 0
     maxScorePosition = (0,0)
@@ -54,12 +54,12 @@ def suffixPrefixAlignment(sequenceRow, sequenceColumn):
             # First row handling
             if i==0:
                 # Create cell in dict; see Cell Class __init__ with typeCell == 1 
-                matrixDict[(i,j)] = Cell(j *(indel),0,0,1)
+                matrixDict[(i,j)] = Cell(0,0,0,1)
             
             # Last column handling
             elif j==0:
                 # Create cell in dict; see Cell Class __init__ with typeCell == 0
-                matrixDict[(i,j)] = Cell(0,0,0,0)
+                matrixDict[(i,j)] = Cell(0,0,0,1)
             
             # Other cells handling
             else:
