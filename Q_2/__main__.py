@@ -11,7 +11,14 @@ def main():
     print(sequences)
 
     result = gapAlignment(sequences[0], sequences[1], scoresInfo)
-    print(result[4])
+
+    position = (len(sequences[0]), len(sequences[1]))
+
+    alignment = optimalAlignment(sequences[0], sequences[1], result[0], result[1], result[2], position, result[3])
+
+    print(alignment[0])
+    print(alignment[1])
+    
 
     #Contain dictionary [0], maximum value [1] and the coordinates of the max value [2]
     # resultSP = suffixPrefixAlignment(sequences[0],sequences[1])

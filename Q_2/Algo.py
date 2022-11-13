@@ -111,7 +111,7 @@ def gapAlignment(sequenceRow, sequenceColumn, scoresInfo):
 
         for j in range((len(sequenceColumn))+1):
             
-            # First row handling
+            # First row and column handling
             if i==0 and j==0: 
                 matrixDictM[(i,j)] = Cell(0, 0, 0, "M", 0)
                 matrixDictX[(i,j)] = Cell(gapPenalityOpen, gapPenalityOpen, gapPenalityOpen, "X", 0)
@@ -175,36 +175,86 @@ def aligmentY(matrixDictM, matrixDictY, gapPenalityOpen, gapPenalityExt, i, j):
 
 
 
-def optimalAlignment(sequenceSuffix, sequencePrefix, cellDictionary, position):
-
-    # prefix first, suffix second
-    alignment = ("","")
-    maxValue = ""
-    positionMaxValue = (0,0)
-
-
-    if position[0] != 0:
+def optimalAlignment(sequenceRow, sequenceColumn, matrixDictM, matrixDictX, matrixDictY, position, currentMatrix):
+    optAlign = ()
+    alignment = ("", "")
+    if position[0] != 0 and position[1] != 0:
     
-        if cellDictionary[position].diag:
-                maxValue = cellDictionary[(position[0] - 1,position[1] - 1)].score
-                positionMaxValue = (position[0] - 1,position[1] - 1)
-                alignment = (alignment[0] + sequencePrefix[position[1] - 1],alignment[1] + sequenceSuffix[position[0] - 1])
-
-        if cellDictionary[position].up:
-            if maxValue == "" or maxValue < cellDictionary[(position[0] - 1,position[1])].score:
-                maxValue = cellDictionary[(position[0]-1,position[1])].score
-                positionMaxValue = (position[0] - 1,position[1])
-                alignment = (alignment[0] + "_" ,alignment[1] + sequenceSuffix[position[0] - 1])
+        if currentMatrix == "M":
+            optAlign = optAlignM(matrixDictM, matrixDictX, matrixDictY, position, sequenceRow, sequenceColumn)
+                
+        if currentMatrix == "X":
+            optAlign = optAlignX(matrixDictM, matrixDictX, position, sequenceRow)
+            
                         
+        if currentMatrix == "Y":
+             optAlign = optAlignY(matrixDictM, matrixDictY, position, sequenceColumn)
+            
                 
-        if cellDictionary[position].left:
-            if maxValue == "" or maxValue < cellDictionary[(position[0],position[1] - 1)].score:
-                maxValue = cellDictionary[(position[0],position[1] - 1)].score
-                positionMaxValue = (position[0],position[1]- 1)
-                alignment = (alignment[0] + sequencePrefix[position[1] - 1] ,alignment[1] + "_")
-                
-        subAlignment =  optimalAlignment(sequenceSuffix, sequencePrefix, cellDictionary, positionMaxValue)
-        alignment = (alignment[0] + subAlignment[0], alignment[1] + subAlignment[1])
+        subAlignment =  optimalAlignment(sequenceRow, sequenceColumn, matrixDictM, matrixDictX, matrixDictY, optAlign[1], optAlign[2])
+        alignment = optAlign[0]
+        alignment = (subAlignment[0] + alignment[0], subAlignment[1] + alignment[1])
 
     return alignment
-        
+
+
+def optAlignM(matrixDictM, matrixDictX, matrixDictY, position, sequenceRow, sequenceColumn):
+    maxValue = ""
+    alignment = (sequenceRow[position[0] - 1], sequenceColumn[position[1] - 1])
+    positionMaxValue = (position[0] - 1, position[1] - 1)
+    newCurrentMatrix = ""
+
+
+    if matrixDictM[position].M:
+        maxValue = matrixDictM[positionMaxValue].score
+        newCurrentMatrix = "M"
+
+    if matrixDictM[position].X:
+        if maxValue == "" or maxValue < matrixDictX[positionMaxValue].score:
+            maxValue = matrixDictX[positionMaxValue].score
+            newCurrentMatrix = "X"
+
+    if matrixDictM[position].Y:
+        if maxValue == "" or maxValue < matrixDictY[positionMaxValue].score:
+            maxValue = matrixDictY[positionMaxValue].score
+            newCurrentMatrix = "Y"
+
+    return (alignment, positionMaxValue, newCurrentMatrix)
+
+
+def optAlignX(matrixDictM, matrixDictX, position, sequenceRow):
+    maxValue = ""
+    alignment = (sequenceRow[position[0] - 1], "_")
+    positionMaxValue = (position[0] - 1, position[1])
+    newCurrentMatrix = ""
+
+
+    if matrixDictX[position].M:
+        maxValue = matrixDictM[positionMaxValue].score
+        newCurrentMatrix = "M"
+
+    if matrixDictX[position].X:
+        if maxValue == "" or maxValue < matrixDictX[positionMaxValue].score:
+            maxValue = matrixDictX[positionMaxValue].score
+            newCurrentMatrix = "X"
+
+    return (alignment, positionMaxValue, newCurrentMatrix)
+
+
+def optAlignY(matrixDictM, matrixDictY, position, sequenceColumn):
+    maxValue = ""
+    alignment = ("_", sequenceColumn[position[1] - 1])
+    positionMaxValue = (position[0], position[1] - 1)
+    newCurrentMatrix = ""
+
+
+    if matrixDictY[position].M:
+        maxValue = matrixDictM[positionMaxValue].score
+        newCurrentMatrix = "M"
+
+    if matrixDictY[position].Y:
+        if maxValue == "" or maxValue < matrixDictY[positionMaxValue].score:
+            maxValue = matrixDictY[positionMaxValue].score
+            newCurrentMatrix = "Y"
+
+    return (alignment, positionMaxValue, newCurrentMatrix)
