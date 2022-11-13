@@ -95,7 +95,7 @@ def gapAlignment(sequenceRow, sequenceColumn, scoresInfo):
 
     # Hard coded scoring values
     # TO REPLACE IN CODE
-    gapPenalityOpen = -3
+    gapPenalityOpen = -10
     gapPenalityExt = -1
 
     # Highest cell score to date
@@ -171,8 +171,27 @@ def aligmentY(matrixDictM, matrixDictY, gapPenalityOpen, gapPenalityExt, i, j):
         valueM = matrixDictM[(i,j-1)].score + gapPenalityOpen + gapPenalityExt
         matrixDictY[(i,j)] = Cell(valueM, -math.inf, valueY, "Y")
 
-    
 
+def findCentralSequence(sequences, scoresInfo):
+    maxScore = -math.inf
+    indexMaxScore = 0
+    matrixScore = []
+    
+    for i  in range (len(sequences)):
+        matrixScore.append(0)
+        for j in range(len(sequences)):
+
+            if j != i:
+                value = gapAlignment(sequences[i], sequences[j], scoresInfo)
+                score = value[4]
+                matrixScore[i] += score
+
+    for i in range(len(matrixScore)):
+        if matrixScore[i] > maxScore:
+            maxScore = matrixScore[i]
+            indexMaxScore = i
+
+    return (indexMaxScore, maxScore)
 
 
 def optimalAlignment(sequenceRow, sequenceColumn, matrixDictM, matrixDictX, matrixDictY, position, currentMatrix):
@@ -185,8 +204,7 @@ def optimalAlignment(sequenceRow, sequenceColumn, matrixDictM, matrixDictX, matr
                 
         if currentMatrix == "X":
             optAlign = optAlignX(matrixDictM, matrixDictX, position, sequenceRow)
-            
-                        
+                          
         if currentMatrix == "Y":
              optAlign = optAlignY(matrixDictM, matrixDictY, position, sequenceColumn)
             

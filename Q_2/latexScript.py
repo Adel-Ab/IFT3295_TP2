@@ -5,11 +5,10 @@ from Algo import *
 # ready to be pasted in overleaf to visualize the matrix
 def LatexScript():
 
+    scoresInfo = blosumFileReader()
     sequences = fileReader()
-
     matrixScore = []
     
-
     for i  in range(len(sequences) + 1):
 
         matrixScore.append([])
@@ -20,17 +19,17 @@ def LatexScript():
                 matrixScore[0].append(" & ")
                 
             elif i == 0:
-                matrixScore[i].append(str(j) + " & ")
+                matrixScore[i].append("S" + str(j) + " & ")
             
             elif j == 0:
-                 matrixScore[i].append(str(i) + " & ")
+                 matrixScore[i].append("S" + str(i) + " & ")
 
             elif j == i:
                 matrixScore[i].append(" x & ")
 
             else:
-                value = suffixPrefixAlignment(sequences[i -1], sequences[j - 1])
-                score = value[1]
+                value = gapAlignment(sequences[i -1], sequences[j - 1], scoresInfo)
+                score = value[4]
                 matrixScore[i].append(str(score) + " & ")
 
 

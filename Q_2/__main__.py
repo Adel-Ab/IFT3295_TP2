@@ -1,23 +1,27 @@
 # Prend en paramètre le chemin d'un fichier FQ. Si le fichier n'est pas de type FQ, le programme va redemander le chemin du fichier. La première séquence est le suffixe et le deuxième le préfixe
 # Retoune l'alignement optimal suffixe-préfixe optimal, le score du chevauchement et le la longeur du chevauchement.
 from Algo import *
+from latexScript import *
 
 def main():
 
     scoresInfo = blosumFileReader()
     sequences = fileReader()
 
-    print(scoresInfo[0])
-    print(sequences)
+    resultCentralSequence = findCentralSequence(sequences, scoresInfo)
+    print(resultCentralSequence)
 
-    result = gapAlignment(sequences[0], sequences[1], scoresInfo)
+    # print(scoresInfo[0])
+    # print(sequences)
 
-    position = (len(sequences[0]), len(sequences[1]))
+    # result = gapAlignment(sequences[0], sequences[1], scoresInfo)
 
-    alignment = optimalAlignment(sequences[0], sequences[1], result[0], result[1], result[2], position, result[3])
+    # position = (len(sequences[0]), len(sequences[1]))
 
-    print(alignment[0])
-    print(alignment[1])
+    # alignment = optimalAlignment(sequences[0], sequences[1], result[0], result[1], result[2], position, result[3])
+
+    # print(alignment[0])
+    # print(alignment[1])
     
 
     #Contain dictionary [0], maximum value [1] and the coordinates of the max value [2]
