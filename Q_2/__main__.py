@@ -9,7 +9,12 @@ def main():
     sequences = fileReader()
 
     resultCentralSequence = findCentralSequence(sequences, scoresInfo)
-    print(resultCentralSequence)
+    print(resultCentralSequence[1])
+
+    alignment = findMultipleAlignment(sequences, resultCentralSequence[0], scoresInfo)
+
+    for i in alignment:
+        print(i)
 
     # print(scoresInfo[0])
     # print(sequences)

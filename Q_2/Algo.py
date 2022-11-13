@@ -32,7 +32,7 @@ def blosumFileReader():
         if isFirstLign:   
             compteur = 0
             for char in line:
-                if char.isalpha():
+                if char != " " and char != "\n":
                     letterDic[char] = compteur
                     compteur += 1
             isFirstLign = False
@@ -193,7 +193,33 @@ def findCentralSequence(sequences, scoresInfo):
 
     return (indexMaxScore, maxScore)
 
+def findMultipleAlignment(sequences, sequenceIndex, scoresInfo):
+    centralSequence = sequences[sequenceIndex]
+    alignSequences = []
 
+    for i in range(len(sequences)):
+
+        if i != sequenceIndex:
+            result = gapAlignment(centralSequence, sequences[i], scoresInfo)
+            position = (len(centralSequence), len(sequences[i]))
+            alignment = optimalAlignment(centralSequence, sequences[i], result[0], result[1], result[2], position, result[3])
+
+            j = 0
+            while j < len(centralSequence):    
+                if centralSequence[j] != alignment[0][j]:
+                    centralSequence = centralSequence[:j] + "*" + centralSequence[j:]
+                    for k in range (len(alignSequences)):
+                        alignSequences[k] = alignSequences[k][:j] + "*" + alignSequences[k][j:]           
+                j += 1
+
+            alignSequences.append(alignment[1])
+
+    alignSequences.insert(0, centralSequence)
+    return alignSequences
+
+            
+            
+    
 def optimalAlignment(sequenceRow, sequenceColumn, matrixDictM, matrixDictX, matrixDictY, position, currentMatrix):
     optAlign = ()
     alignment = ("", "")
@@ -242,7 +268,7 @@ def optAlignM(matrixDictM, matrixDictX, matrixDictY, position, sequenceRow, sequ
 
 def optAlignX(matrixDictM, matrixDictX, position, sequenceRow):
     maxValue = ""
-    alignment = (sequenceRow[position[0] - 1], "_")
+    alignment = (sequenceRow[position[0] - 1], "*")
     positionMaxValue = (position[0] - 1, position[1])
     newCurrentMatrix = ""
 
@@ -261,7 +287,7 @@ def optAlignX(matrixDictM, matrixDictX, position, sequenceRow):
 
 def optAlignY(matrixDictM, matrixDictY, position, sequenceColumn):
     maxValue = ""
-    alignment = ("_", sequenceColumn[position[1] - 1])
+    alignment = ("*", sequenceColumn[position[1] - 1])
     positionMaxValue = (position[0], position[1] - 1)
     newCurrentMatrix = ""
 
