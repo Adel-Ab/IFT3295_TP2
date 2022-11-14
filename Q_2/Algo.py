@@ -302,3 +302,17 @@ def optAlignY(matrixDictM, matrixDictY, position, sequenceColumn):
             newCurrentMatrix = "Y"
 
     return (alignment, positionMaxValue, newCurrentMatrix)
+
+
+def SPScore(arrayAlignment):
+    rangeLoop = 0
+    SpScore = 0
+    for i in range(len(arrayAlignment) - 1):
+        for j in range(rangeLoop, len(arrayAlignment), 1):
+            for k in range(len(arrayAlignment[i])):
+                if arrayAlignment[i][k] != arrayAlignment[j][k]:
+                    SpScore += 1
+        rangeLoop += 1
+
+    return SpScore
+            

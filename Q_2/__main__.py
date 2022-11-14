@@ -9,9 +9,13 @@ def main():
     sequences = fileReader()
 
     resultCentralSequence = findCentralSequence(sequences, scoresInfo)
-    print(resultCentralSequence[1])
+    print("Score séquence centrale : " + str(resultCentralSequence[1]))
+
+    print("Séquence centrale : " + str(resultCentralSequence[0] + 1))
 
     alignment = findMultipleAlignment(sequences, resultCentralSequence[0], scoresInfo)
+
+    print("Score SP :" + str(SPScore(alignment)))
 
     for i in alignment:
         print(i)
