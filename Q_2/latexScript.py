@@ -37,3 +37,31 @@ def LatexScript():
         test = "".join(matrixScore[i])
         print("\hline")
         print(test)
+
+
+def latexScriptConsensus(arrayConsensus):
+    matrixConsensus = []
+    
+    for i in range(2):
+        matrixConsensus.append([])
+        for j in range(len(arrayConsensus)):
+        
+            if i == 0:
+                matrixConsensus[i].append("C" + str(j+1) + " & ")
+
+            else:
+                matrixConsensus[i].append(arrayConsensus[j] + " & ")
+
+
+    start = 0
+    finish = 18
+    for j in range (len(arrayConsensus) // 18): 
+        for i in range(len(matrixConsensus)):
+            if(finish < len(arrayConsensus)):
+                test = "".join(matrixConsensus[i][start:finish])
+            else:
+                test = "".join(matrixConsensus[i][start:])
+            print("\hline")
+            print(test)
+        start += 18
+        finish += 18

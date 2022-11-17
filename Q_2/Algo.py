@@ -315,4 +315,27 @@ def SPScore(arrayAlignment):
         rangeLoop += 1
 
     return SpScore
+
+
+def consensusPerColumn(sequences):
+    arrayConsensus = []
+    currentDictionnary = {}
+    for i in range(len(sequences[0])):
+        for j in sequences:
+            if j[i] in currentDictionnary :
+                currentDictionnary[j[i]] += 1
+            else:
+                currentDictionnary[j[i]] = 1
+
+        maxvalue = 0
+        maxValueCharacter = ""
+        for k in currentDictionnary.items():
+            if k[1] > maxvalue:
+                maxvalue = k[1]
+                maxValueCharacter = k[0]
+        
+        arrayConsensus.append(maxValueCharacter)
+        currentDictionnary.clear()
+
+    return arrayConsensus
             

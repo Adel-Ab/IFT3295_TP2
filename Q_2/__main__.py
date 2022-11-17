@@ -20,32 +20,10 @@ def main():
     for i in alignment:
         print(i)
 
-    # print(scoresInfo[0])
-    # print(sequences)
+    arrayConsensus = consensusPerColumn(alignment)
 
-    # result = gapAlignment(sequences[0], sequences[1], scoresInfo)
-
-    # position = (len(sequences[0]), len(sequences[1]))
-
-    # alignment = optimalAlignment(sequences[0], sequences[1], result[0], result[1], result[2], position, result[3])
-
-    # print(alignment[0])
-    # print(alignment[1])
-    
-
-    #Contain dictionary [0], maximum value [1] and the coordinates of the max value [2]
-    # resultSP = suffixPrefixAlignment(sequences[0],sequences[1])
-    
-    # alignment = optimalAlignment(sequences[0], sequences[1], resultSP[0], resultSP[2])
-
-    # alignmentPrefix = alignment[0][::-1]
-    # alignmentSuffix = alignment[1][::-1]
-
-    # print( sequences[0][0 : len(sequences[0])  - resultSP[2][1]] + alignmentSuffix)
-    # print( len(alignmentSuffix) * " " + alignmentPrefix + sequences[1][resultSP[2][1] : len(sequences[1])])
-    # print("Score = {}".format(resultSP[1]))
-    # print("longueur chevauchement = {}".format(len(alignmentPrefix)))
+    #latexScriptConsensus(arrayConsensus)
+     
    
-
 if __name__ == "__main__":
     main()
