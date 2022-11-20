@@ -8,14 +8,12 @@ def main():
     sequenceInversedComplemented = inverseComplement(sequence)
 
     repliement = simpleNussinov(sequence,sequenceInversedComplemented)
-    backTracking( sequence,((inverseComplement(sequence))[::-1]), repliement[0], (len(sequence)-1,len(sequence)-1))
-
-
-    #### TO DO :
-    # BACKTRACK
-    # Clean up le max score,max position ?
-    
-   
-
+    result = backTracking( sequence,((sequence))[::-1], repliement[0], (len(sequence)-1,len(sequence)-1))
+    # Max score
+    print(repliement[1])
+    # Max score position
+    print(repliement[2])
+    simpleNussinov(sequence,sequenceInversedComplemented)
 if __name__ == "__main__":
     main()
+    #GCGUGCUUGCGUGCACG
