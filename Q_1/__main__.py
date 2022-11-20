@@ -5,10 +5,11 @@ from Algo import *
 def main():
 
     sequence = getSequence()
-    sequenceInversedComplemented = (sequence)
+    sequenceInversedComplemented = inverseComplement(sequence)
 
     repliement = simpleNussinov(sequence,sequenceInversedComplemented)
-    
+    backTracking( sequence,((inverseComplement(sequence))[::-1]), repliement[0], (len(sequence)-1,len(sequence)-1))
+
 
     #### TO DO :
     # BACKTRACK
