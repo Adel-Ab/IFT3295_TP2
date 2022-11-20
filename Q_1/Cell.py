@@ -2,13 +2,18 @@
 
 class Cell:
 
-    def __init__(self, valueFromRow, valueFromColumn, valueFromDiagonal, diagLimit = False):
+    def __init__(self, valueFromRow, valueFromColumn, valueFromDiagonal, matching, diagLimit = False):
         
         # Setting the arrows activation at false
         self.up = False
         self.left = False
         self.diag = False
-        # Setting score at -1
+
+        # Matching situation of the cell i,j
+        self.match = matching
+        # If the cell is part of the anti-diagonal limit
+        self.diagLimit = diagLimit
+        # Setting score at 0
         self.score = 0
            
         # If cell is not on the anti-diagonal

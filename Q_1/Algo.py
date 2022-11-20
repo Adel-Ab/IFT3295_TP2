@@ -51,16 +51,18 @@ def simpleNussinov(sequenceRow, sequenceColumn):
         
         # Keeping count of the two first cells as anti-diagonal cells
         diagsCount = 2
-
+        print(("__________________"))
         # Go through matrix rows from last to first
         for i in range(len(sequenceRow)-2-j,len(sequenceRow)):
         
             # Create the 0 anti diagonal for the first two cells
             # Note: Last column case; Cell at i =-1 and i=0 will be created as a diag cell 
             if (diagsCount != 0):
+                if diagsCount ==2:
+                    matrixDict[(i,j)] = Cell(0,0,0,False,True)
+                else:
+                    matrixDict[(i,j)] = Cell(0,0,0,False)
                 diagsCount -= 1
-                matrixDict[(i,j)] = Cell(0,0,0,True)
-
             # If not an anti diagonal cell
             else:
                 # Get the score of the previous row cell
@@ -72,7 +74,7 @@ def simpleNussinov(sequenceRow, sequenceColumn):
                 # Get the score of the diagonale value summed with the matching\mismatch value
                 valueFromDiag = matrixDict[(i-1,j-1)].score + matching
                 # Create cell
-                matrixDict[(i,j)] = Cell(valueFromRow, valueFromColumn, valueFromDiag)
+                matrixDict[(i,j)] = Cell(valueFromRow, valueFromColumn, valueFromDiag, bool(matching))
 
                 # Update the highest score and its position
                 if maxScore < max(valueFromRow, valueFromColumn, valueFromDiag):
@@ -80,7 +82,7 @@ def simpleNussinov(sequenceRow, sequenceColumn):
                     maxScorePosition = (i,j)
                     
             #### TESTING PRINT ###
-            print(matrixDict[(i,j)].score)
+            print(str(i) + ','+ str(j) + ':' + str(matrixDict[(i,j)].score))
                     
     return (matrixDict, maxScore, maxScorePosition)
 
@@ -89,36 +91,45 @@ def simpleNussinov(sequenceRow, sequenceColumn):
 
 ######## backtracking TO DO 
 
-def optimalAlignment(sequenceSuffix, sequencePrefix, cellDictionary, position):
+def backTracking(sequence, reversedSequence, matrixDict, position):
 
-    # prefix first, suffix second
-    alignment = ("","")
-    maxValue = ""
-    positionMaxValue = (0,0)
+    alignment = ""
+    maxValue = -1
+    nextPosition = ()
+    i = position[0]
+    j = position[1]
 
+    if matrixDict[position].diagLimit == False:
 
-    if position[0] != 0:
-    
-        if cellDictionary[position].diag:
-                maxValue = cellDictionary[(position[0] - 1,position[1] - 1)].score
-                positionMaxValue = (position[0] - 1,position[1] - 1)
-                alignment = (alignment[0] + sequencePrefix[position[1] - 1],alignment[1] + sequenceSuffix[position[0] - 1])
+        if matrixDict[position].diag:
+                maxValue = matrixDict[(i-1, j-1)].score
+                nextPosition = (i-1, j-1)
 
-        if cellDictionary[position].up:
-            if maxValue == "" or maxValue < cellDictionary[(position[0] - 1,position[1])].score:
-                maxValue = cellDictionary[(position[0]-1,position[1])].score
-                positionMaxValue = (position[0] - 1,position[1])
-                alignment = (alignment[0] + "_" ,alignment[1] + sequenceSuffix[position[0] - 1])
+                # Verifie si le lien est fort ou faible pour le lien diagonale
+                if matrixDict[(i,j)].match :
+                    alignment += reversedSequence[i] + str(i) + "=+=" + sequence[j] + str(j) + " # "
+                else :
+                    alignment += reversedSequence[i] + str(i) + "=-=" + sequence[j] + str(j) + " # "
+
+        if matrixDict[position].up:
+            if maxValue == "" or maxValue < matrixDict[(i-1, j)].score:
+                maxValue = matrixDict[(i-1,j)].score
+                nextPosition = (i-1,j)
+
+                #lien faible i == i-1
+                alignment += reversedSequence[i] + str(i) + "=-=" + reversedSequence[i-1] + str(i-1) + " # "
                         
                 
-        if cellDictionary[position].left:
-            if maxValue == "" or maxValue < cellDictionary[(position[0],position[1] - 1)].score:
-                maxValue = cellDictionary[(position[0],position[1] - 1)].score
-                positionMaxValue = (position[0],position[1]- 1)
-                alignment = (alignment[0] + sequencePrefix[position[1] - 1] ,alignment[1] + "_")
+        if matrixDict[position].left:
+            if maxValue == "" or maxValue < matrixDict[( i, j-1)].score:
+                maxValue = matrixDict[(i,j-1)].score
+                nextPosition = (i,j-1)
+
+                #lien faible j == j-1 
+                alignment += sequence[j] + str(j) + "=-=" + sequence[j-1] + str(j-1) + " # "
                 
-        subAlignment =  optimalAlignment(sequenceSuffix, sequencePrefix, cellDictionary, positionMaxValue)
-        alignment = (alignment[0] + subAlignment[0], alignment[1] + subAlignment[1])
+        subAlignment =  backTracking(sequence, reversedSequence, matrixDict, nextPosition)
+        alignment += subAlignment
 
     return alignment
         
