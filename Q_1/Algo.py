@@ -51,6 +51,7 @@ def simpleNussinov(sequenceRow, sequenceColumn):
         
         # Keeping count of the two first cells as anti-diagonal cells
         diagsCount = 2
+        ### TESTING PRINT TO SEPARATE COLUMNS
         print(("__________________"))
         # Go through matrix rows from last to first
         for i in range(len(sequenceRow)-2-j,len(sequenceRow)):
@@ -107,21 +108,21 @@ def backTracking(sequence, reversedSequence, matrixDict, position):
 
                 # Verifie si le lien est fort ou faible pour le lien diagonale
                 if matrixDict[(i,j)].match :
-                    alignment += reversedSequence[i] + str(i) + "=+=" + sequence[j] + str(j) + " # "
+                    alignment += reversedSequence[i] + str(len(sequence)-1-i) + "=+=" + sequence[j] + str(j) + " # "
                 else :
-                    alignment += reversedSequence[i] + str(i) + "=-=" + sequence[j] + str(j) + " # "
+                    alignment += reversedSequence[i] + str(len(sequence)-1-i) + "=-=" + sequence[j] + str(j) + " # "
 
-        if matrixDict[position].up:
-            if maxValue == "" or maxValue < matrixDict[(i-1, j)].score:
+        elif matrixDict[position].up:
+            if maxValue == -1 or maxValue < matrixDict[(i-1, j)].score:
                 maxValue = matrixDict[(i-1,j)].score
                 nextPosition = (i-1,j)
 
                 #lien faible i == i-1
-                alignment += reversedSequence[i] + str(i) + "=-=" + reversedSequence[i-1] + str(i-1) + " # "
+                alignment += reversedSequence[i] + str(len(sequence)-1-i) + "=-=" + reversedSequence[i-1] + str(len(sequence)-1-i-1) + " # "
                         
                 
-        if matrixDict[position].left:
-            if maxValue == "" or maxValue < matrixDict[( i, j-1)].score:
+        elif matrixDict[position].left:
+            if maxValue == -1 or maxValue < matrixDict[( i, j-1)].score:
                 maxValue = matrixDict[(i,j-1)].score
                 nextPosition = (i,j-1)
 
